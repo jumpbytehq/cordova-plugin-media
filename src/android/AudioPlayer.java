@@ -322,6 +322,7 @@ public class AudioPlayer implements OnCompletionListener, OnPreparedListener, On
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             try {
                 int currentPosision = player.getCurrentPosition();
+                mediaPlayer.pause();
                 player.reset();
                 player.setDataSource(file);
                 player.prepare();
