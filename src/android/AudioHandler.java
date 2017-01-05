@@ -129,7 +129,7 @@ public class AudioHandler extends CordovaPlugin {
             }
             this.startPlayingAudio(args.getString(0), FileHelper.stripFileProtocol(fileUri));
         } else if (action.equals("setRate")){
-            this.setAudioRate(args.getString(0), fileUri, args.getLong(1));
+            this.setAudioRate(args.getString(0), fileUri, Float.parseFloat(args.getString(1)));
         } else if (action.equals("seekToAudio")) {
             this.seekToAudio(args.getString(0), args.getInt(1));
         } else if (action.equals("pausePlayingAudio")) {
