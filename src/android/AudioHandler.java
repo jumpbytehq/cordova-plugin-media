@@ -312,7 +312,7 @@ public class AudioHandler extends CordovaPlugin {
         getAudioFocus();
     }
 
-    public void setAudioRate(String id, String file, long tempoRate) {
+    public void setAudioRate(String id, String file, float tempoRate) {
         AudioPlayer audio = getOrCreatePlayer(id, file);
         if (audio != null) {
             Log.i("TAG", " tempoRate "+tempoRate);
