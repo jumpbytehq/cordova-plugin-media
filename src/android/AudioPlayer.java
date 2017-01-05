@@ -322,13 +322,15 @@ public class AudioPlayer implements OnCompletionListener, OnPreparedListener, On
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             try {
                 int currentPosision = player.getCurrentPosition();
-                player.pause();
-                player.reset();
-                player.setDataSource(file);
-                player.prepare();
-                player.seekTo(currentPosision);
-                player.setPlaybackParams(player.getPlaybackParams().setSpeed(rate));
-                player.start();
+                this.player.pause();
+                this.player.reset();
+                this.player = new MediaPlayer();
+                this.player.setDataSource(file);
+                this.player.prepare();
+                this.player.seekTo(currentPosision);
+                this.player.setPlaybackParams(player.getPlaybackParams().setSpeed(rate));
+                this.player.start();
+                setState(STATE.MEDIA_RUNNING);
             } catch (Exception e) {
                 Log.i("TAG", "Exeption " + e);
             }
