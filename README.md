@@ -370,6 +370,11 @@ function playAudio(url) {
         var myMedia = new Media("audio/beer.mp3")
         myMedia.play()  // first looks for file in www/audio/beer.mp3 then in <application>/documents/tmp/audio/beer.mp3
 
+- __defaultSeek__: Pass this option to the `play` method to specify
+  the default starting position of media, e.g.:
+
+        myMedia.play({ defaultSeek: 15 })
+
 ## media.release
 
 Releases the underlying operating system's audio resources.

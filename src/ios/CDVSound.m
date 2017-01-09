@@ -324,7 +324,8 @@
     NSString* mediaId = [command argumentAtIndex:0];
     NSString* resourcePath = [command argumentAtIndex:1];
     NSDictionary* options = [command argumentAtIndex:2 withDefault:nil];
-
+    Float64 defaultSeek = [[options objectForKey: @"defaultSeek"] floatValue];
+        
     BOOL bError = NO;
     NSString* jsString = nil;
 
@@ -373,6 +374,9 @@
                     } else {
                         NSLog(@"Playing stream with AVPlayer & default rate");
                         [avPlayer play];
+                        CMTime targetTime = CMTimeMakeWithSeconds(defaultSeek, NSEC_PER_SEC);
+                        [avPlayer seekToTime:targetTime
+                                toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
                     }
 
                 } else {
