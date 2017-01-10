@@ -99,7 +99,7 @@ public class AudioPlayer implements OnCompletionListener, OnPreparedListener, On
 
     private MediaPlayer player = null;      // Audio player object
     private boolean prepareOnly = true;     // playback after file prepare flag
-    private int seekOnPrepared = 0;     // seek to this location once media is prepared
+    private float seekOnPrepared;     // seek to this location once media is prepared
 
     /**
      * Constructor.
@@ -113,6 +113,23 @@ public class AudioPlayer implements OnCompletionListener, OnPreparedListener, On
         this.audioFile = file;
         this.tempFiles = new LinkedList<String>();
     }
+
+    /**
+     *  overwrite constructore.
+     *
+     * @param handler       The audio handler object
+     * @param id            The id of this audio player
+     * @param file          audio file
+     * @param defautSeek    from wehre defult track will start
+     */
+    public AudioPlayer(AudioHandler handler, String id, String file, float defautSeek) {
+        this.handler = handler;
+        this.id = id;
+        this.audioFile = file;
+        this.tempFiles = new LinkedList<String>();
+        this.seekOnPrepared = defautSeek;
+    }
+
 
     private String generateTempFile() {
         String tempFileName = null;
@@ -405,7 +422,7 @@ public class AudioPlayer implements OnCompletionListener, OnPreparedListener, On
             sendStatusChange(MEDIA_POSITION, null, (curPos / 1000.0f));
             return curPos;
         } else {
-            return -1;
+            return (long)seekOnPrepared;
         }
     }
 
@@ -464,8 +481,9 @@ public class AudioPlayer implements OnCompletionListener, OnPreparedListener, On
         // Listen for playback completion
         this.player.setOnCompletionListener(this);
         // seek to any location received while not prepared
-        this.seekToPlaying(this.seekOnPrepared);
+        this.seekToPlaying((int) this.seekOnPrepared);
         // If start playing after prepared
+        Log.i(LOG_TAG, "seek to position " + seekOnPrepared);
         if (!this.prepareOnly) {
             this.player.start();
             this.setState(STATE.MEDIA_RUNNING);

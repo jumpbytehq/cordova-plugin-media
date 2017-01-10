@@ -121,15 +121,21 @@ public class AudioHandler extends CordovaPlugin {
             this.resumeRecordingAudio(args.getString(0));
         } else if (action.equals("startPlayingAudio")) {
             String target = args.getString(1);
+            float defautSeek = 0;
+            if (args.getJSONObject(2) != null) {
+                JSONObject object = args.getJSONObject(2);
+                defautSeek = Float.parseFloat(object.getString("defaultSeek"));
+                defautSeek = defautSeek * 1000;
+            }
             try {
                 Uri targetUri = resourceApi.remapUri(Uri.parse(target));
                 fileUri = targetUri.toString();
             } catch (IllegalArgumentException e) {
                 fileUri = target;
             }
-            this.startPlayingAudio(args.getString(0), FileHelper.stripFileProtocol(fileUri));
-        } else if (action.equals("setRate")){
-            this.setAudioRate(args.getString(0), fileUri, Float.parseFloat(args.getString(1)));
+            this.startPlayingAudio(args.getString(0), FileHelper.stripFileProtocol(fileUri), defautSeek);
+        } else if (action.equals("setRate")) {
+            this.setAudioRate(args.getString(0), fileUri, args.getLong(1));
         } else if (action.equals("seekToAudio")) {
             this.seekToAudio(args.getString(0), args.getInt(1));
         } else if (action.equals("pausePlayingAudio")) {
@@ -247,6 +253,19 @@ public class AudioHandler extends CordovaPlugin {
         return ret;
     }
 
+    private AudioPlayer getOrCreatePlayer(String id, String file, float defautSeek) {
+        AudioPlayer ret = players.get(id);
+        if (ret != null) {
+            if (players.isEmpty()) {
+                onFirstPlayerCreated();
+            }
+            ret = new AudioPlayer(this, id, file, defautSeek);
+
+            players.put(id, ret);
+        }
+        return ret;
+    }
+
     /**
      * Release the audio player instance to save memory.
      *
@@ -306,16 +325,16 @@ public class AudioHandler extends CordovaPlugin {
      * @param id   The id of the audio player
      * @param file The name of the audio file.
      */
-    public void startPlayingAudio(String id, String file) {
-        AudioPlayer audio = getOrCreatePlayer(id, file);
+    public void startPlayingAudio(String id, String file, float defautSeek) {
+        AudioPlayer audio = getOrCreatePlayer(id, file, defautSeek);
         audio.startPlaying(file);
         getAudioFocus();
     }
 
-    public void setAudioRate(String id, String file, float tempoRate) {
+    public void setAudioRate(String id, String file, long tempoRate) {
         AudioPlayer audio = getOrCreatePlayer(id, file);
         if (audio != null) {
-            Log.i("TAG", " tempoRate "+tempoRate);
+            Log.i("TAG", " tempoRate " + tempoRate);
             audio.setRate((float) tempoRate, file);
         }
     }
