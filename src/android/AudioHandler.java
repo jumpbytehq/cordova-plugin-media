@@ -135,7 +135,7 @@ public class AudioHandler extends CordovaPlugin {
             }
             this.startPlayingAudio(args.getString(0), FileHelper.stripFileProtocol(fileUri), defautSeek);
         } else if (action.equals("setRate")) {
-            this.setAudioRate(args.getString(0), fileUri, args.getLong(1));
+            this.setAudioRate(args.getString(0), fileUri, Float.parseFloat(args.getString(1)));
         } else if (action.equals("seekToAudio")) {
             this.seekToAudio(args.getString(0), args.getInt(1));
         } else if (action.equals("pausePlayingAudio")) {
@@ -331,11 +331,11 @@ public class AudioHandler extends CordovaPlugin {
         getAudioFocus();
     }
 
-    public void setAudioRate(String id, String file, long tempoRate) {
+    public void setAudioRate(String id, String file, float tempoRate) {
         AudioPlayer audio = getOrCreatePlayer(id, file);
         if (audio != null) {
             Log.i("TAG", " tempoRate " + tempoRate);
-            audio.setRate((float) tempoRate, file);
+            audio.setRate(tempoRate, file);
         }
     }
 
