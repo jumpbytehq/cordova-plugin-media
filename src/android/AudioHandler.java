@@ -69,6 +69,8 @@ public class AudioHandler extends CordovaPlugin {
     private String recordId;
     private String fileUriStr;
     private String fileUri;
+    private String lastTrack = "lastTrack";
+    private static boolean trackChanged = false;
 
     /**
      * Constructor.
@@ -326,11 +328,22 @@ public class AudioHandler extends CordovaPlugin {
      * @param file The name of the audio file.
      */
     public void startPlayingAudio(String id, String file, float defautSeek) {
+        if (lastTrack.equalsIgnoreCase(file)){
+            trackChanged = false;
+            Log.i("TAG", "same Track "+ lastTrack);
+        }else {
+            lastTrack = file;
+            trackChanged = true;
+            Log.i("TAG", "Track changed "+ lastTrack);
+        }
         AudioPlayer audio = getOrCreatePlayer(id, file, defautSeek);
         audio.startPlaying(file);
         getAudioFocus();
     }
 
+    public static boolean isTrackChanged(){
+        return trackChanged;
+    }
     public void setAudioRate(String id, String file, float tempoRate) {
         AudioPlayer audio = getOrCreatePlayer(id, file);
         if (audio != null) {

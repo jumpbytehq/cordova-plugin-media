@@ -101,6 +101,7 @@ public class AudioPlayer implements OnCompletionListener, OnPreparedListener, On
     private boolean prepareOnly = true;     // playback after file prepare flag
     private float seekOnPrepared;     // seek to this location once media is prepared
 
+
     /**
      * Constructor.
      *
@@ -421,7 +422,10 @@ public class AudioPlayer implements OnCompletionListener, OnPreparedListener, On
             int curPos = this.player.getCurrentPosition();
             sendStatusChange(MEDIA_POSITION, null, (curPos / 1000.0f));
             return curPos;
-        } else {
+        } else if (!AudioHandler.isTrackChanged()){
+            return (long) seekOnPrepared;
+        }
+        else {
             return -1;
         }
     }
