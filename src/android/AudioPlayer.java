@@ -422,7 +422,7 @@ public class AudioPlayer implements OnCompletionListener, OnPreparedListener, On
             sendStatusChange(MEDIA_POSITION, null, (curPos / 1000.0f));
             return curPos;
         } else {
-            return (long)seekOnPrepared;
+            return -1;
         }
     }
 
