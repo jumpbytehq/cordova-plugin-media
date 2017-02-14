@@ -400,6 +400,7 @@
                     }
 
                     [audioFile.player play];
+                    duration = round(audioFile.player.duration * 1000) / 1000;
                     NSTimeInterval current = defaultSeek;
                     audioFile.player.currentTime = current;
                 }
