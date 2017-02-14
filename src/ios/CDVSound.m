@@ -380,7 +380,6 @@
                     }
 
                 } else {
-
                     NSNumber* loopOption = [options objectForKey:@"numberOfLoops"];
                     NSInteger numberOfLoops = 0;
                     if (loopOption != nil) {
@@ -401,7 +400,8 @@
                     }
 
                     [audioFile.player play];
-                    duration = round(audioFile.player.duration * 1000) / 1000;
+                    NSTimeInterval current = defaultSeek;
+                    audioFile.player.currentTime = current;
                 }
 
                 jsString = [NSString stringWithFormat:@"%@(\"%@\",%d,%.3f);\n%@(\"%@\",%d,%d);", @"cordova.require('cordova-plugin-media.Media').onStatus", mediaId, MEDIA_DURATION, duration, @"cordova.require('cordova-plugin-media.Media').onStatus", mediaId, MEDIA_STATE, MEDIA_RUNNING];
